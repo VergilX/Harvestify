@@ -27,6 +27,7 @@ defusedxml==0.7.1
 dill==0.3.8
 docopt==0.6.2
 entrypoints==0.4
+exceptiongroup==1.2.0
 executing==2.0.1
 fastjsonschema==2.19.1
 filelock==3.13.1
@@ -144,6 +145,7 @@ testpath==0.6.0
 threadpoolctl==3.4.0
 tinycss2==1.2.1
 toml==0.10.2
+tomli==2.0.1
 tomlkit==0.12.4
 torch==2.2.1
 torchaudio==2.2.1
