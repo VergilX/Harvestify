@@ -19,33 +19,33 @@ from utils.model import ResNet9
 # -------------------------LOADING THE TRAINED MODELS -----------------------------------------------
 
 # Loading plant disease classification model
-
-disease_classes = ['banana_sigatoka', 
-                   'rice_Bacterial leaf blight', 
-                   'coconut_Leaf Rot', 
-                   'coconut_Bud Root Dropping', 
-                   'banana_healthy', 
-                   'mango_Bacterial Canker', 
-                   'mango_Gall Midge', 
-                   'coconut_Gray Leaf Spot', 
-                   'papaya_Anthracnose', 
-                   'papaya_RingSpot', 
-                   'rice_Brown spot', 
-                   'mango_Powdery Mildew', 
-                   'papaya_Curl leaf', 
-                   'mango_Cutting Weevil', 
-                   'papaya_Healthy', 
-                   'coconut_healthy', 
-                   'mango_Sooty Mould', 
-                   'papaya_BacterialSpot', 
-                   'coconut_Bud Rot', 
-                   'rice_healthy', 
-                   'mango_Healthy', 
-                   'rice_Leaf smut', 
-                   'banana_pestalotiopsis', 
-                   'mango_Die Back', 
-                   'banana_cordana', 
-                   'mango_Anthracnose'
+# (should be in alphabetical order)
+disease_classes = ['banana_Cordana',
+                   'banana_Pestalotiopsis',
+                   'banana_Sigatoka',
+                   'banana_healthy',
+                   'coconut_Bud_Root_Dropping',
+                   'coconut_Bud_Rot',
+                   'coconut_Gray_Leaf_Spot',
+                   'coconut_Leaf_Rot',
+                   'coconut_healthy',
+                   'mango_Anthracnose',
+                   'mango_Bacterial_Canker',
+                   'mango_Cutting_Weevil',
+                   'mango_Die_Back',
+                   'mango_Gall_Midge',
+                   'mango_Healthy',
+                   'mango_Powdery_Mildew',
+                   'mango_Sooty_Mould',
+                   'papaya_Anthracnose',
+                   'papaya_Bacterial_Spot',
+                   'papaya_Curl_Leaf',
+                   'papaya_Healthy',
+                   'papaya_Ring_Spot',
+                   'rice_Bacterial_Leaf_Blight',
+                   'rice_Brown_Spot',
+                   'rice_Leaf_Smut',
+                   'rice_healthy'
                    ]
 
 
@@ -114,7 +114,6 @@ def predict_image(img, model=disease_model):
     _, preds = torch.max(yb, dim=1)
     prediction = disease_classes[preds[0].item()]
     # Retrieve the class label
-    print("aswingei prediction: ", prediction)
     return prediction
 
 # ===============================================================================================
@@ -180,11 +179,9 @@ def crop_prediction():
             my_prediction = crop_recommendation_model.predict(data)
             final_prediction = my_prediction[0]
 
-            print("you did it mf")
             return render_template('crop-result.html', prediction=final_prediction, title=title)
 
         else:
-            print("Try again mf")
 
             return render_template('try_again.html', title=title)
 
@@ -244,16 +241,13 @@ def disease_prediction():
             return redirect(request.url)
         file = request.files.get('file')
         if not file:
-            print("hi")
             return render_template('disease.html', title=title)
         img = file.read()
 
         prediction = predict_image(img)
 
         prediction = Markup(str(disease_dic[prediction]))
-        print("hello")
         return render_template('disease-result.html', prediction=prediction, title=title)
-    print("Frick")
     return render_template('disease.html', title=title)
 
 
