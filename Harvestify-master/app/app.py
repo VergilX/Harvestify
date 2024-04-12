@@ -169,6 +169,7 @@ def crop_prediction():
         K = int(request.form['pottasium'])
         ph = float(request.form['ph'])
         rainfall = float(request.form['rainfall'])
+        crop = request.form['crop']
 
         # state = request.form.get("stt")
         city = request.form.get("city")
@@ -178,6 +179,12 @@ def crop_prediction():
             data = np.array([[N, P, K, temperature, humidity, ph, rainfall]])
             my_prediction = crop_recommendation_model.predict(data)
             final_prediction = my_prediction[0]
+
+            print("Final prediction: ", final_prediction)
+            if crop != final_prediction:
+                final_prediction = f"Sorry the crop you require cannot be grown in this soil. You may grow {final_prediction} instead."
+            else:
+                final_prediction = f"You may grow {final_prediction} in your soil"
 
             return render_template('crop-result.html', prediction=final_prediction, title=title)
 
