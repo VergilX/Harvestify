@@ -14,6 +14,7 @@ import torch
 from torchvision import transforms
 from PIL import Image
 from utils.model import ResNet9
+from inference_sdk import InferenceHTTPClient
 # ==============================================================================================
 
 # -------------------------LOADING THE TRAINED MODELS -----------------------------------------------
@@ -239,6 +240,7 @@ def fert_recommend():
 # render disease prediction result page
 
 
+"""
 @app.route('/disease-predict', methods=['GET', 'POST'])
 def disease_prediction():
     title = 'AgroAdvisor - Disease Detection'
@@ -252,6 +254,37 @@ def disease_prediction():
         img = file.read()
 
         prediction = predict_image(img)
+
+        prediction = Markup(str(disease_dic[prediction]))
+        print(prediction)
+        return render_template('disease-result.html', prediction=prediction, title=title)
+    return render_template('disease.html', title=title)
+"""
+
+@app.route('/disease-predict', methods=['GET', 'POST'])
+def disease_prediction():
+    title = 'AgroAdvisor - Disease Detection'
+
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return redirect(request.url)
+        file = request.files.get('file')
+        if not file:
+            return render_template('disease.html', title=title)
+
+        img_bytes = file.read()
+        img = Image.open(io.BytesIO(img_bytes))
+
+        # prediction = predict_image(img)
+
+        # create an inference client
+        CLIENT = InferenceHTTPClient(
+            api_url="https://detect.roboflow.com",
+            api_key="32Vt53zabzuwkIEqSyMP"
+        )
+
+        # run inference on a local image
+        prediction = CLIENT.infer(img, model_id="plant-diseases-p58ve/1")['predictions'][0]['class']
 
         prediction = Markup(str(disease_dic[prediction]))
         return render_template('disease-result.html', prediction=prediction, title=title)
