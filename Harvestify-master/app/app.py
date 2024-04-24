@@ -14,7 +14,7 @@ import torch
 from torchvision import transforms
 from PIL import Image
 from utils.model import ResNet9
-from inference_sdk import InferenceHTTPClient
+from config import CLIENT
 # ==============================================================================================
 
 # -------------------------LOADING THE TRAINED MODELS -----------------------------------------------
@@ -277,16 +277,11 @@ def disease_prediction():
 
         # prediction = predict_image(img)
 
-        # create an inference client
-        CLIENT = InferenceHTTPClient(
-            api_url="https://detect.roboflow.com",
-            api_key="32Vt53zabzuwkIEqSyMP"
-        )
-
-        # run inference on a local image
         prediction = CLIENT.infer(img, model_id="plant-diseases-p58ve/1")['predictions'][0]['class']
+        print(prediction)
 
         prediction = Markup(str(disease_dic[prediction]))
+        print(prediction)
         return render_template('disease-result.html', prediction=prediction, title=title)
     return render_template('disease.html', title=title)
 
